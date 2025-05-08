@@ -15,9 +15,8 @@ function emailFieldValidate(){
     })
 }
 
-function checkIfPasswordsMatch(){
-    console.log(passwordInputField.value);
-    
+function setPasswordMatchLogic(){
+
     if (passwordInputField.value !== passwordConfirmationInputField.value){
         passwordInputField.setCustomValidity('Passwords Must Match');
         passwordConfirmationInputField.setCustomValidity('Passwords Must Match');
@@ -28,17 +27,42 @@ function checkIfPasswordsMatch(){
     }
 }
 
+function checkIfPasswordsMatch(){
+    passwordInputField.addEventListener('input', setPasswordMatchLogic); 
+    passwordConfirmationInputField.addEventListener('input', setPasswordMatchLogic);
+}
+
+function checkPasswordRequirements(){
+
+    passwordInputField.addEventListener('input', () => {
+        const passwordRegex = /[!@#$%^&*(),.?":{}|<>]/;
+
+        if(!passwordRegex.test(passwordInputField.value)){
+            passwordInputField.setCustomValidity('Password must contain a special char');
+        }
+        else{
+            passwordInputField.setCustomValidity(''); 
+        }
+    })
+ 
+}
+
 
 function formValidation() {
     emailFieldValidate();
-    checkIfPasswordsMatch()
+    checkIfPasswordsMatch();
+    checkPasswordRequirements();
 
 }
 
 form.addEventListener('submit', (e) => {
+    
     e.preventDefault(); 
 
-    console.log('form submitted');
     formValidation();
+    
+
+    console.log('form submitted');
+    
 
 })
